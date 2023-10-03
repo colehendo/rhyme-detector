@@ -5,38 +5,22 @@ import pronouncing
 
 
 class RhymeBuilder:
-    def __init__(self) -> None:
-        pass
-
-    def count_word_syllables(self, word: str) -> int:
-        pronunciations = pronouncing.phones_for_word(word)
-
-        if not pronunciations:
-            return 1
-
-        syllable_count = pronouncing.syllable_count(pronunciations[0])
-        return syllable_count
-
-    def create_syllable_count_dict(self, file_lines: List[str]):
+    @staticmethod
+    def create_syllable_count_dict(file_lines: List[str]):
         syllable_count_dict = defaultdict(list)
 
         for line_number, line in enumerate(file_lines):
-            total_syllables = 0
             word_index = len(line) - 1
 
-            for word in reversed(line):
-                syllable_count = self.count_word_syllables(word)
-
+            for reverse_word_index, word in enumerate(reversed(line)):
                 syllable_count_dict[word].append(
                     (
                         line_number,
                         word_index,
-                        total_syllables,
-                        total_syllables + syllable_count,
+                        reverse_word_index,
                     )
                 )
 
-                total_syllables += syllable_count
                 word_index -= 1
 
         return syllable_count_dict
@@ -67,10 +51,21 @@ class RhymeBuilder:
             combined_word_placements.extend(main_word_placements)
             all_matched_word_placements.append(combined_word_placements)
 
+        # Add duplicate words if they are one of the last two words in a line
+        else:
+            trailing_words = [
+                word_placement
+                for word_placement in main_word_placements
+                if word_placement[2] in (0, 1)
+            ]
+            all_matched_word_placements.append(trailing_words)
+
         if syllable_count_dict:
             self.iterate_over_dict(syllable_count_dict, all_matched_word_placements)
 
-    def get_matched_word_placements(self, file_lines: List[str]) -> List[List[Tuple[int]]]:
+    def get_matched_word_placements(
+        self, file_lines: List[str]
+    ) -> List[List[Tuple[int]]]:
         matched_word_placements = []
 
         syllable_count_dict = self.create_syllable_count_dict(file_lines)

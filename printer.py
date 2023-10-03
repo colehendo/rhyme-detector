@@ -4,9 +4,6 @@ from typing import List, Tuple
 
 
 class Printer:
-    def __init__(self) -> None:
-        pass
-
     @property
     @cache
     def color_codes_to_avoid(self) -> List[int]:
@@ -22,14 +19,16 @@ class Printer:
     def pick_color_code(self, selected_numbers: List[int]) -> int:
         number = randint(1, 231)
 
-        # The last conditional checks if there are still unique ascii values
-        if number in self.color_codes_to_avoid or (number in selected_numbers and len(selected_numbers) < 236):
+        # The last condition checks if there are still unique ascii values
+        if number in self.color_codes_to_avoid or (
+            number in selected_numbers and len(selected_numbers) < 236
+        ):
             self.pick_color_code(selected_numbers)
 
         selected_numbers.append(number)
         return number
 
-    def color_word_backgrounds(
+    def highlight_words(
         self, lines: List[str], matched_word_placements: List[List[Tuple[int]]]
     ):
         color_base = "\u001b[48;5;"
@@ -48,7 +47,8 @@ class Printer:
                     word_index
                 ] = f"{color_base}{str(color_code)}m{lines[line][word_index]}{clear}"
 
-    def print_rhyme(self, file_lines: List[str]):
+    @staticmethod
+    def print_rhyme(file_lines: List[str]):
         for index, line in enumerate(file_lines):
             file_lines[index] = " ".join(line)
             print(file_lines[index])
@@ -57,5 +57,5 @@ class Printer:
     def print_rhyme_handler(
         self, file_lines: List[str], matched_word_placements: List[List[Tuple[int]]]
     ):
-        self.color_word_backgrounds(file_lines, matched_word_placements)
+        self.highlight_words(file_lines, matched_word_placements)
         self.print_rhyme(file_lines)
