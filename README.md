@@ -3,6 +3,7 @@
 ## Description
 This rhyme detector is built based on Genius Lyrics' [Check the Rhyme](https://genius.com/shows/ctr), and leverages their API for lyrics. The code retrieves the lyrics of a specified song, detects the rhymes within based on the [CMU Pronouncing Dictionary](https://en.wikipedia.org/wiki/CMU_Pronouncing_Dictionary), and outputs a highlighted rhyming pattern.
 
+
 ## Usage
 ### Install Necessary Packages
 ```
@@ -10,6 +11,8 @@ pip install -r requirements.txt
 ```
 
 ### Run the Rhyme Detector
+Note, results are more accurate if an artist is provided.
+
 Example 1:
 ```
 python main.py --song 'bohemian rhapsody'
@@ -20,7 +23,6 @@ Example 2:
 python main.py --song 'hey jude' --artist 'the beatles'
 ```
 
-Note, results are more accurate if an artist is provided.
 
 ## Future Improvements
 * Replace text ingestion with audio
