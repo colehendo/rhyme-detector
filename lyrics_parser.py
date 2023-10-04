@@ -52,6 +52,7 @@ class LyricsCleaner:
         for line_number in range(3):
             if "Contributors" in self.lyric_lines[line_number]:
                 return line_number
+        return -1
 
     def clean_lyrics(self) -> List[str]:
         cleaned_lyric_lines = []
